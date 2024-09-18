@@ -1,0 +1,1 @@
+# Plataforma Clima API
