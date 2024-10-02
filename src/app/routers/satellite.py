@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from math import isnan
 from typing import List
 
 from fastapi import APIRouter, HTTPException
@@ -38,7 +39,9 @@ async def get_satellite_chart(
     def map_to_models(row):
         return SatelliteChartDataOut(
             timestamp=pendulum_parse(row["data_medicao"], tz="America/Sao_Paulo"),
-            value=row["valor"],
+            value=row["valor"]
+            if row["valor"] and not isnan(float(row["valor"]))
+            else None,
         )
 
     # Sanity checks
