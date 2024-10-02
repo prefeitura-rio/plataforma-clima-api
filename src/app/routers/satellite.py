@@ -3,12 +3,15 @@ from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter, HTTPException
-from pendulum import DateTime
+from google.cloud import bigquery
+from loguru import logger
+from pendulum import DateTime, parse as pendulum_parse
 
 from app import config
 from app.enums import SatelliteProductEnum
 from app.pydantic_models import ImageSliderOut, SatelliteChartDataOut
 from app.utils import (
+    get_data_from_bigquery,
     get_matching_blobs,
     sanity_check_time_range,
 )
@@ -32,13 +35,69 @@ async def get_satellite_chart(
     start_time: datetime,
     end_time: datetime,
 ):
+    def map_to_models(row):
+        return SatelliteChartDataOut(
+            timestamp=pendulum_parse(row["data_medicao"], tz="America/Sao_Paulo"),
+            value=row["valor"],
+        )
+
     # Sanity checks
     start_time, end_time = sanity_check_time_range(
         start_time,
         end_time,
         max_allowed_range_seconds=config.SATELLITE_GIF_MAX_ALLOWED_RANGE_SECONDS,
     )
-    raise HTTPException(status_code=501, detail="This is not implemented yet.")
+
+    # Parse start_time and end_time to pendulum.DateTime
+    start_time = DateTime.instance(start_time, tz=config.TIMEZONE)
+    start_time = start_time.in_tz(config.TIMEZONE)
+    end_time = DateTime.instance(end_time, tz=config.TIMEZONE)
+    end_time = end_time.in_tz(config.TIMEZONE)
+
+    # If it's RR or SST, we still got no data
+    if product in [
+        SatelliteProductEnum.RAIN_RATE,
+        SatelliteProductEnum.OCEAN_TEMPERATURE,
+    ]:
+        raise HTTPException(
+            status_code=501, detail="This product is not implemented yet."
+        )
+
+    table = config.BIGQUERY_TABLE_METRICAS_GEOESPACIAIS
+    mapping = config.SATELLITE_PRODUCTS_MAPPING.get(product, None)
+    if not mapping:
+        raise HTTPException(status_code=400, detail="Invalid product")
+    column = mapping.get("column")
+    if not column:
+        raise HTTPException(
+            status_code=501, detail="This product is not implemented yet."
+        )
+    query = f"""
+    SELECT
+        data_medicao,
+        valor
+    FROM {table}
+    WHERE
+        data_medicao BETWEEN @start_time AND @end_time
+        AND produto_satelite = @column
+    LIMIT 1
+    """
+    query_params = [
+        bigquery.ScalarQueryParameter(
+            "start_time", "STRING", start_time.format("YYYY-MM-DD HH:mm:ss")
+        ),
+        bigquery.ScalarQueryParameter(
+            "end_time", "STRING", end_time.format("YYYY-MM-DD HH:mm:ss")
+        ),
+        bigquery.ScalarQueryParameter("column", "STRING", column),
+    ]
+    logger.debug(f"Query: {query}")
+    logger.debug(f"Query Params: {query_params}")
+    data = get_data_from_bigquery(query=query, query_params=query_params)
+
+    logger.debug(f"Data:\n{data}")
+
+    return data.apply(map_to_models, axis=1).tolist()
 
 
 @router.get(
@@ -50,10 +109,6 @@ async def get_satellite_gif(
     product: SatelliteProductEnum,
     start_time: datetime,
     end_time: datetime,
-    latitude_min: float = None,
-    latitude_max: float = None,
-    longitude_min: float = None,
-    longitude_max: float = None,
 ):
     # Sanity checks
     start_time, end_time = sanity_check_time_range(
@@ -72,60 +127,16 @@ async def get_satellite_gif(
     mapping = config.SATELLITE_PRODUCTS_MAPPING.get(product, None)
     if not mapping:
         raise HTTPException(status_code=400, detail="Invalid product")
-
-    return get_matching_blobs(product=product, start_time=start_time, end_time=end_time)
-
-    raise HTTPException(status_code=501, detail="This is not implemented yet.")
-    # query = """
-    # SELECT
-    #     latitude,
-    #     longitude,
-    #     data_particao,
-    #     horario,
-    #     @column AS value
-    # FROM @table
-    # WHERE
-    #     data_particao BETWEEN @start_date AND @end_date
-    #     AND horario BETWEEN @start_time AND @end_time
-    # """.replace("@table", table).replace("@column", column)
-    # # TODO: handle timezones. data is in America/Sao_Paulo timezone
-    # query_params = [
-    #     bigquery.ScalarQueryParameter(
-    #         "start_date", "STRING", start_time.strftime("%Y-%m-%d")
-    #     ),
-    #     bigquery.ScalarQueryParameter(
-    #         "end_date", "STRING", end_time.strftime("%Y-%m-%d")
-    #     ),
-    #     bigquery.ScalarQueryParameter(
-    #         "start_time", "STRING", start_time.strftime("%H:%M:%S")
-    #     ),
-    #     bigquery.ScalarQueryParameter(
-    #         "end_time", "STRING", end_time.strftime("%H:%M:%S")
-    #     ),
-    # ]
-    # if latitude_min is not None:
-    #     query += " AND latitude >= @latitude_min"
-    #     query_params.append(
-    #         bigquery.ScalarQueryParameter("latitude_min", "STRING", latitude_min)
-    #     )
-    # if latitude_max is not None:
-    #     query += " AND latitude <= @latitude_max"
-    #     query_params.append(
-    #         bigquery.ScalarQueryParameter("latitude_max", "STRING", latitude_max)
-    #     )
-    # if longitude_min is not None:
-    #     query += " AND longitude >= @longitude_min"
-    #     query_params.append(
-    #         bigquery.ScalarQueryParameter("longitude_min", "STRING", longitude_min)
-    #     )
-    # if longitude_max is not None:
-    #     query += " AND longitude <= @longitude_max"
-    #     query_params.append(
-    #         bigquery.ScalarQueryParameter("longitude_max", "STRING", longitude_max)
-    #     )
-    # logger.debug(f"Query: {query}")
-    # logger.debug(f"Query Params: {query_params}")
-    # data = get_data_from_bigquery(query=query, query_params=query_params)
-    # logger.debug(f"Data:\n{data}")
-
-    # raise HTTPException(status_code=501, detail="This is not implemented yet.")
+    gcs_product_prefix = mapping.get("gcs_prefix")
+    if not gcs_product_prefix:
+        raise HTTPException(
+            status_code=501, detail="This product is not implemented yet."
+        )
+    path_prefix = "cor-clima-imagens/satelite/goes16/without_background/"
+    blob_name_prefix = f"{gcs_product_prefix}_"
+    return get_matching_blobs(
+        start_time=start_time,
+        end_time=end_time,
+        path_prefix=path_prefix,
+        blob_name_prefix=blob_name_prefix,
+    )

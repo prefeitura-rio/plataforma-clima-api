@@ -23,7 +23,6 @@ from loguru import logger
 from pendulum import DateTime
 
 from app import config
-from app.enums import SatelliteProductEnum
 from app.pydantic_models import ImageSliderOut
 
 
@@ -165,38 +164,51 @@ def get_gcp_credentials(scopes: List[str] = None) -> service_account.Credentials
 
 
 def get_matching_blobs(
-    product: SatelliteProductEnum,
     start_time: pendulum.DateTime,
     end_time: pendulum.DateTime,
     *,
     bucket_name: str = "datario-public",
-    path_prefix: str = "cor-clima-imagens/satelite/goes16/without_background/",
+    path_prefix: str = "",
+    blob_name_prefix: str = "",
+    blob_extension: str = ".png",
+    timestamp_format: str = "YYYY-MM-DD HH:mm:ss",
+    timezone: str = "America/Sao_Paulo",
 ) -> List[ImageSliderOut]:
     """
     Fetch public URLs of BLOBs from a GCS bucket that match the specified product and time range.
 
     Args:
-        product (SatelliteProductEnum): The product to match in the BLOB names.
         start_time (pendulum.DateTime): The start of the time range (inclusive).
         end_time (pendulum.DateTime): The end of the time range (inclusive).
         bucket_name (str, optional): The name of the GCS bucket. Defaults to "datario-public".
-        path_prefix (str, optional): The prefix of the BLOB names. Defaults to
-            "cor-clima-imagens/satelite/goes16/without_background/".
+        path_prefix (str, optional): The path prefix of the BLOBs. Defaults to an empty string.
+        blob_name_prefix (str, optional): The prefix of the BLOB names. Defaults to an empty string.
+        blob_extension (str, optional): The extension of the BLOBs. Defaults to ".png".
+        timestamp_format (str, optional): The format of the timestamp in the BLOB names.
+            Defaults to "YYYY-MM-DD HH:mm:ss".
+        timezone (str, optional): The timezone of the timestamps. Defaults to "America/Sao_Paulo".
 
     Returns:
         List[str]: A list of public URLs for matching BLOBs.
     """
+
+    # If the timestamp_format doesn't start with "YYYY-MM-DD", raise an exception
+    if not timestamp_format.startswith("YYYY-MM-DD"):
+        raise ValueError("The timestamp format must start with 'YYYY-MM-DD'.")
+
+    # If the extension do not start with ".", add it
+    if not blob_extension.startswith("."):
+        blob_extension = "." + blob_extension
 
     # Initialize the GCS client
     client = get_gcs_client()
     bucket = client.get_bucket(bucket_name)
 
     # Build the prefix. It must start with the path prefix and the product
-    gcs_product_prefix = config.SATELLITE_PRODUCTS_MAPPING[product]["gcs_prefix"]
-    prefix = path_prefix.rstrip("/") + f"/{gcs_product_prefix}"
+    prefix = path_prefix.rstrip("/") + "/" + blob_name_prefix
     # If the year is the same for both start_time and end_time, add it to the prefix
     if start_time.year == end_time.year:
-        prefix += f"_{start_time.year}"
+        prefix += f"{start_time.year}"
     # If the month is the same for both start_time and end_time, add it to the prefix
     if start_time.month == end_time.month:
         prefix += f"-{start_time.month:02d}"
@@ -211,20 +223,20 @@ def get_matching_blobs(
     matching_urls: List[ImageSliderOut] = []
 
     for blob in blobs:
-        blob_name = blob.name
+        blob_name: str = blob.name
+        logger.debug(f"Blob name: {blob_name}")
         # Extract the date and time from the BLOB name
-        # Example blob name: PRODUCT_YYYY-MM-DD HH:MM:SS.png
         parts = blob_name.split("/")
+        logger.debug(f"Parts: {parts}")
         if len(parts) < 2:
             continue
         timestamp_str = (
-            parts[-1].replace(".png", "").replace(f"{gcs_product_prefix}_", "")
+            parts[-1].replace(blob_extension, "").replace(blob_name_prefix, "")
         )
+        logger.debug(f"Timestamp str: {timestamp_str}")
         # Parse the timestamp with America/Sao_Paulo timezone
         logger.debug(f"Timestamp str: {timestamp_str}")
-        timestamp = pendulum.from_format(
-            timestamp_str, "YYYY-MM-DD HH:mm:ss", tz="America/Sao_Paulo"
-        )
+        timestamp = pendulum.from_format(timestamp_str, timestamp_format, tz=timezone)
 
         # Check if the product matches and the timestamp is within the specified range
         if start_time <= timestamp <= end_time:

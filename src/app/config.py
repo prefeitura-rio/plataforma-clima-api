@@ -119,6 +119,9 @@ ALLOWED_ORIGINS_REGEX = getenv_or_action("ALLOWED_ORIGINS_REGEX", action="ignore
 BIGQUERY_TABLE_INDICE_ESTABILIDADE = getenv_or_action(
     "BIGQUERY_TABLE_INDICE_ESTABILIDADE"
 )
+BIGQUERY_TABLE_METRICAS_GEOESPACIAIS = getenv_or_action(
+    "BIGQUERY_TABLE_METRICAS_GEOESPACIAIS"
+)
 BIGQUERY_TABLE_TAXA_PRECIPITACAO = getenv_or_action("BIGQUERY_TABLE_TAXA_PRECIPITACAO")
 BIGQUERY_TABLE_TEMPERATURA_OCEANO = getenv_or_action(
     "BIGQUERY_TABLE_TEMPERATURA_OCEANO"
@@ -142,37 +145,30 @@ SATELLITE_PRODUCTS_MAPPING = {
     SatelliteProductEnum.CAPE: {
         "column": "cape",
         "gcs_prefix": "CAPE",
-        "table": BIGQUERY_TABLE_INDICE_ESTABILIDADE,
     },
     SatelliteProductEnum.K_INDEX: {
         "column": "ki",
         "gcs_prefix": "KI",
-        "table": BIGQUERY_TABLE_INDICE_ESTABILIDADE,
     },
     SatelliteProductEnum.SHOWALTER_INDEX: {
         "column": "si",
         "gcs_prefix": "SI",
-        "table": BIGQUERY_TABLE_INDICE_ESTABILIDADE,
     },
     SatelliteProductEnum.LIFTED_INDEX: {
         "column": "li",
         "gcs_prefix": "LI",
-        "table": BIGQUERY_TABLE_INDICE_ESTABILIDADE,
     },
     SatelliteProductEnum.TOTALS_TOTALS_INDEX: {
         "column": "tt",
         "gcs_prefix": "TT",
-        "table": BIGQUERY_TABLE_INDICE_ESTABILIDADE,
     },
     SatelliteProductEnum.RAIN_RATE: {
         "column": "rr",
         "gcs_prefix": "RR",
-        "table": BIGQUERY_TABLE_TAXA_PRECIPITACAO,
     },
     SatelliteProductEnum.OCEAN_TEMPERATURE: {
         "column": "sst",
         "gcs_prefix": "SST",
-        "table": BIGQUERY_TABLE_TEMPERATURA_OCEANO,
     },
 }
 SENTRY_ENABLE = getenv_or_action("SENTRY_ENABLE", default="false").lower() == "true"
