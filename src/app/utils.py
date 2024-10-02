@@ -12,15 +12,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 import orjson as json
 import pandas as pd
+import pendulum
 import xarray as xr
 from fastapi import HTTPException
-from google.cloud import bigquery
+from google.cloud import bigquery, storage
 from google.cloud.bigquery.query import _AbstractQueryParameter
+from google.cloud.storage import Blob
 from google.oauth2 import service_account
 from loguru import logger
 from pendulum import DateTime
 
 from app import config
+from app.enums import SatelliteProductEnum
+from app.pydantic_models import ImageSliderOut
 
 
 def create_and_save_image(data: xr.DataArray, info: dict, variable) -> Path:
@@ -123,6 +127,16 @@ def get_bigquery_client() -> bigquery.Client:
     return bigquery.Client(credentials=credentials, project=credentials.project_id)
 
 
+def get_gcs_client() -> storage.Client:
+    """Get the Google Cloud Storage client.
+
+    Returns:
+        storage.Client: The Google Cloud Storage client.
+    """
+    credentials = get_gcp_credentials()
+    return storage.Client(credentials=credentials, project=credentials.project_id)
+
+
 def get_data_from_bigquery(
     query: str,
     query_params: List[_AbstractQueryParameter] = None,
@@ -148,6 +162,77 @@ def get_gcp_credentials(scopes: List[str] = None) -> service_account.Credentials
     if scopes:
         creds = creds.with_scopes(scopes)
     return creds
+
+
+def get_matching_blobs(
+    product: SatelliteProductEnum,
+    start_time: pendulum.DateTime,
+    end_time: pendulum.DateTime,
+    *,
+    bucket_name: str = "datario-public",
+    path_prefix: str = "cor-clima-imagens/satelite/goes16/without_background/",
+) -> List[ImageSliderOut]:
+    """
+    Fetch public URLs of BLOBs from a GCS bucket that match the specified product and time range.
+
+    Args:
+        product (SatelliteProductEnum): The product to match in the BLOB names.
+        start_time (pendulum.DateTime): The start of the time range (inclusive).
+        end_time (pendulum.DateTime): The end of the time range (inclusive).
+        bucket_name (str, optional): The name of the GCS bucket. Defaults to "datario-public".
+        path_prefix (str, optional): The prefix of the BLOB names. Defaults to
+            "cor-clima-imagens/satelite/goes16/without_background/".
+
+    Returns:
+        List[str]: A list of public URLs for matching BLOBs.
+    """
+
+    # Initialize the GCS client
+    client = get_gcs_client()
+    bucket = client.get_bucket(bucket_name)
+
+    # Build the prefix. It must start with the path prefix and the product
+    gcs_product_prefix = config.SATELLITE_PRODUCTS_MAPPING[product]["gcs_prefix"]
+    prefix = path_prefix.rstrip("/") + f"/{gcs_product_prefix}"
+    # If the year is the same for both start_time and end_time, add it to the prefix
+    if start_time.year == end_time.year:
+        prefix += f"_{start_time.year}"
+    # If the month is the same for both start_time and end_time, add it to the prefix
+    if start_time.month == end_time.month:
+        prefix += f"-{start_time.month:02d}"
+    # If the day is the same for both start_time and end_time, add it to the prefix
+    if start_time.day == end_time.day:
+        prefix += f"-{start_time.day:02d}"
+    logger.debug(f"Prefix: {prefix}")
+
+    # List all BLOBs with the specified prefix
+    blobs: List[Blob] = bucket.list_blobs(prefix=prefix)
+
+    matching_urls: List[ImageSliderOut] = []
+
+    for blob in blobs:
+        blob_name = blob.name
+        # Extract the date and time from the BLOB name
+        # Example blob name: PRODUCT_YYYY-MM-DD HH:MM:SS.png
+        parts = blob_name.split("/")
+        if len(parts) < 2:
+            continue
+        timestamp_str = (
+            parts[-1].replace(".png", "").replace(f"{gcs_product_prefix}_", "")
+        )
+        # Parse the timestamp with America/Sao_Paulo timezone
+        logger.debug(f"Timestamp str: {timestamp_str}")
+        timestamp = pendulum.from_format(
+            timestamp_str, "YYYY-MM-DD HH:mm:ss", tz="America/Sao_Paulo"
+        )
+
+        # Check if the product matches and the timestamp is within the specified range
+        if start_time <= timestamp <= end_time:
+            matching_urls.append(
+                ImageSliderOut(timestamp=timestamp, image_url=blob.public_url)
+            )
+
+    return matching_urls
 
 
 def parse_datetime_to_pendulum_datetime(datetime: datetime) -> DateTime:
