@@ -80,7 +80,6 @@ async def get_satellite_chart(
     WHERE
         data_medicao BETWEEN @start_time AND @end_time
         AND produto_satelite = @column
-    LIMIT 1
     """
     query_params = [
         bigquery.ScalarQueryParameter(
@@ -94,6 +93,7 @@ async def get_satellite_chart(
     logger.debug(f"Query: {query}")
     logger.debug(f"Query Params: {query_params}")
     data = get_data_from_bigquery(query=query, query_params=query_params)
+    data.drop_duplicates(inplace=True)
 
     logger.debug(f"Data:\n{data}")
 
