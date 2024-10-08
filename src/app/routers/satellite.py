@@ -11,6 +11,7 @@ from pendulum import DateTime, parse as pendulum_parse
 from app import config
 from app.enums import SatelliteProductEnum
 from app.pydantic_models import ImageSliderOut, SatelliteChartDataOut
+from app.products_info import PRODUCTS_INFO
 from app.utils import (
     get_data_from_bigquery,
     get_matching_blobs,
@@ -143,3 +144,20 @@ async def get_satellite_gif(
         path_prefix=path_prefix,
         blob_name_prefix=blob_name_prefix,
     )
+
+
+@router.get(
+    "/info/{product}",
+    summary="Get information about a satellite product",
+    response_model=dict,
+)
+async def get_satellite_info(product: SatelliteProductEnum):
+    mapping = config.SATELLITE_PRODUCTS_MAPPING.get(product, None)
+    if not mapping:
+        raise HTTPException(status_code=400, detail="Invalid product")
+    product_info = PRODUCTS_INFO.get(product, None)
+    if not product_info:
+        raise HTTPException(
+            status_code=501, detail="This product is not implemented yet."
+        )
+    return product_info
