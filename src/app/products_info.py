@@ -30,7 +30,7 @@ PRODUCTS_INFO = {
             "projection": "Geographical",
             "update_frequency": "Hourly",
             "spatial_resolution": "4 km x 4 km",
-            "interpolation_method": "mean",
+            "interpolation_method": "None",
             "additional_layers": [
                 {
                     "type": "Topography",
@@ -66,7 +66,7 @@ PRODUCTS_INFO = {
             "projection": "Geographical",
             "update_frequency": "Hourly",
             "spatial_resolution": "4 km x 4 km",
-            "interpolation_method": "mean",
+            "interpolation_method": "None",
             "additional_layers": [
                 {
                     "type": "Topography",
@@ -104,7 +104,7 @@ PRODUCTS_INFO = {
             "projection": "Geographical",
             "update_frequency": "Hourly",
             "spatial_resolution": "4 km x 4 km",
-            "interpolation_method": "mean",
+            "interpolation_method": "None",
             "additional_layers": [
                 {
                     "type": "Topography",
@@ -142,7 +142,7 @@ PRODUCTS_INFO = {
             "projection": "Geographical",
             "update_frequency": "Hourly",
             "spatial_resolution": "4 km x 4 km",
-            "interpolation_method": "mean",
+            "interpolation_method": "None",
             "additional_layers": [
                 {
                     "type": "Topography",
@@ -178,7 +178,81 @@ PRODUCTS_INFO = {
             "projection": "Geographical",
             "update_frequency": "Hourly",
             "spatial_resolution": "4 km x 4 km",
-            "interpolation_method": "mean",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
+    SatelliteProductEnum.RAIN_RATE: {
+        "product": {
+            "name": "RR (Rain Rate)",
+            "description": "A taxa de chuva (Rain Rate - RR) é uma medida da intensidade da precipitação, expressa em milímetros por hora (mm/h). Ela indica a quantidade de chuva que cai em uma determinada área dentro de um período de tempo. Valores mais altos representam chuvas mais intensas, enquanto valores baixos indicam precipitação leve ou inexistente.",
+            "unit": "mm/h",
+            "source": "Satélite GOES-16",
+            "frequency": "10 Min",
+        },
+        "values_range": {"min": 0, "max": 50},
+        "legend": {
+            "title": "Taxa de Chuva (RR)",
+            "colors": [
+                {"value": 0, "color": "#FFFFFF"},
+                {"value": 5, "color": "#ADD8E6"},
+                {"value": 10, "color": "#87CEEB"},
+                {"value": 20, "color": "#00BFFF"},
+                {"value": 30, "color": "#1E90FF"},
+                {"value": 40, "color": "#0000FF"},
+                {"value": 50, "color": "#00008B"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
+    SatelliteProductEnum.SEA_SURFACE_TEMPERATURE: {
+        "product": {
+            "name": "SST (Sea Surface Temperature)",
+            "description": "A Temperatura da Superfície do Mar (SST) é uma medida da temperatura da água na superfície dos oceanos. Este parâmetro é fundamental para o monitoramento climático, previsão meteorológica e estudos oceanográficos, afetando padrões climáticos globais e a saúde dos ecossistemas marinhos.",
+            "unit": "K",
+            "source": "Satélite GOES-16",
+            "frequency": "10 Min",
+        },
+        "values_range": {"min": 268, "max": 308},
+        "legend": {
+            "title": "Temperatura da Superfície do Mar (SST)",
+            "colors": [
+                {"value": 268, "color": "#00008B"},
+                {"value": 273, "color": "#0000FF"},
+                {"value": 278, "color": "#00BFFF"},
+                {"value": 283, "color": "#87CEEB"},
+                {"value": 288, "color": "#00FF00"},
+                {"value": 293, "color": "#FFFF00"},
+                {"value": 298, "color": "#FFA500"},
+                {"value": 303, "color": "#FF4500"},
+                {"value": 308, "color": "#FF0000"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
             "additional_layers": [
                 {
                     "type": "Topography",
