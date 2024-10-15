@@ -22,7 +22,7 @@ PRODUCTS_INFO = {
                 {"value": 5000, "color": "#FFA500"},
                 {"value": 6000, "color": "#FF4500"},
                 {"value": 7000, "color": "#FF0000"},
-                {"value": 8000, "color": "#800000"}
+                {"value": 8000, "color": "#800000"},
             ],
             "opacity": 0.1,
         },
@@ -58,7 +58,7 @@ PRODUCTS_INFO = {
                 {"value": 30, "color": "#FFFF00"},
                 {"value": 40, "color": "#FFA500"},
                 {"value": 50, "color": "#FF0000"},
-                {"value": 60, "color": "#800000"}
+                {"value": 60, "color": "#800000"},
             ],
             "opacity": 0.1,
         },
@@ -134,7 +134,7 @@ PRODUCTS_INFO = {
                 {"value": 5, "color": "#FF4500"},
                 {"value": 10, "color": "#FF0000"},
                 {"value": 15, "color": "#FF4500"},
-                {"value": 20, "color": "#FF0000"}
+                {"value": 20, "color": "#FF0000"},
             ],
             "opacity": 0.1,
         },
@@ -170,7 +170,7 @@ PRODUCTS_INFO = {
                 {"value": 40, "color": "#00FF00"},
                 {"value": 50, "color": "#FFFF00"},
                 {"value": 60, "color": "#FFA500"},
-                {"value": 70, "color": "#800000"}
+                {"value": 70, "color": "#800000"},
             ],
             "opacity": 0.1,
         },
@@ -206,7 +206,7 @@ PRODUCTS_INFO = {
                 {"value": 20, "color": "#00BFFF"},
                 {"value": 30, "color": "#1E90FF"},
                 {"value": 40, "color": "#00008B"},
-                {"value": 50, "color": "#800000"}
+                {"value": 50, "color": "#800000"},
             ],
             "opacity": 0.1,
         },
@@ -244,7 +244,7 @@ PRODUCTS_INFO = {
                 {"value": 293, "color": "#FFFF00"},
                 {"value": 298, "color": "#FFA500"},
                 {"value": 303, "color": "#FF4500"},
-                {"value": 308, "color": "#800000"}
+                {"value": 308, "color": "#800000"},
             ],
             "opacity": 0.1,
         },
@@ -282,7 +282,7 @@ PRODUCTS_INFO = {
                 {"value": 40, "color": "#FFFF00"},
                 {"value": 50, "color": "#FFA500"},
                 {"value": 55, "color": "#FF4500"},
-                {"value": 60, "color": "#800000"}
+                {"value": 60, "color": "#800000"},
             ],
             "opacity": 0.1,
         },
