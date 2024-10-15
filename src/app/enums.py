@@ -10,3 +10,4 @@ class SatelliteProductEnum(str, Enum):
     TOTALS_TOTALS_INDEX = "tt"
     RAIN_RATE = "rr"
     OCEAN_TEMPERATURE = "sst"
+    TOTAL_PRECIPITABLE_WATER = "tpw"

@@ -224,10 +224,10 @@ PRODUCTS_INFO = {
             ],
         },
     },
-    SatelliteProductEnum.SEA_SURFACE_TEMPERATURE: {
+    SatelliteProductEnum.OCEAN_TEMPERATURE: {
         "product": {
             "name": "SST (Sea Surface Temperature)",
-            "description": "A Temperatura da Superfície do Mar (SST) é uma medida da temperatura da água na superfície dos oceanos. Este parâmetro é fundamental para o monitoramento climático, previsão meteorológica e estudos oceanográficos, afetando padrões climáticos globais e a saúde dos ecossistemas marinhos.",
+            "description": "A Temperatura da Superfície do Mar (SST) é uma medida da temperatura da água na superfície dos oceanos.",
             "unit": "K",
             "source": "Satélite GOES-16",
             "frequency": "10 Min",
@@ -265,7 +265,7 @@ PRODUCTS_INFO = {
     SatelliteProductEnum.TOTAL_PRECIPITABLE_WATER: {
         "product": {
             "name": "TPW (Total Precipitable Water)",
-            "description": "A Água Precipitada Total (TPW) é uma medida da quantidade total de vapor d'água presente na coluna de ar acima de um ponto específico. Este parâmetro é crucial para o estudo do clima, previsão de chuvas e análise de eventos meteorológicos extremos.",
+            "description": "A Água Precipitada Total (TPW) é uma medida da quantidade total de vapor d'água presente na coluna de ar acima de um ponto específico.",
             "unit": "mm",
             "source": "Satélite GOES-16",
             "frequency": "10 Min",
