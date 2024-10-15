@@ -10,18 +10,19 @@ PRODUCTS_INFO = {
             "source": "Satélite GOES-16",
             "frequency": "10 Min",
         },
-        "values_range": {"min": 0, "max": 5000},
+        "values_range": {"min": 0, "max": 8000},
         "legend": {
             "title": "Energia Potencial Convectiva (CAPE)",
             "colors": [
-                {"value": 0, "color": "#0000FF"},
-                {"value": 500, "color": "#00FFFF"},
-                {"value": 1000, "color": "#00FF00"},
-                {"value": 1500, "color": "#FFFF00"},
-                {"value": 2000, "color": "#FFA500"},
-                {"value": 3000, "color": "#FF4500"},
-                {"value": 4000, "color": "#FF0000"},
-                {"value": 5000, "color": "#8B0000"},
+                {"value": 0, "color": "#0000FF"},     # Azul
+                {"value": 1000, "color": "#00FFFF"},  # Ciano
+                {"value": 2000, "color": "#00FF00"},  # Verde
+                {"value": 3000, "color": "#FFFF00"},  # Amarelo
+                {"value": 4000, "color": "#FFA500"},  # Laranja
+                {"value": 5000, "color": "#FF4500"},  # Laranja Escuro
+                {"value": 6000, "color": "#FF0000"},  # Vermelho
+                {"value": 7000, "color": "#8B0000"},  # Vermelho Escuro
+                {"value": 8000, "color": "#4B0082"}   # Índigo
             ],
             "opacity": 0.1,
         },
