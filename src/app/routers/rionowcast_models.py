@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+
 # from math import isnan
 from typing import List
 
 from fastapi import APIRouter, HTTPException
+
 # from google.cloud import bigquery
 # from loguru import logger
 from pendulum import DateTime, parse as pendulum_parse
 
 from app import config
 from app.enums import RionowcastModelProductEnum
-from app.pydantic_models import ImageSliderOut  #, SatelliteChartDataOut
+from app.pydantic_models import ImageSliderOut  # , SatelliteChartDataOut
 from app.products_info import PRODUCTS_INFO
 from app.utils import (
     # get_data_from_bigquery,

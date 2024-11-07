@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-from app.enums import SatelliteProductEnum, RionowcastModelProductEnum, ImpaModelProductEnum
+from app.enums import (
+    SatelliteProductEnum,
+    RionowcastModelProductEnum,
+    ImpaModelProductEnum,
+)
 
 PRODUCTS_INFO = {
     SatelliteProductEnum.CAPE: {
