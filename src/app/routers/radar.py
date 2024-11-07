@@ -46,5 +46,4 @@ async def get_mendanha_radar_data(
         start_time=start_time,
         end_time=end_time,
         path_prefix=path_prefix,
-        timestamp_format="YYYY-MM-DD-HH-mm-ss",  # TODO: Modify this when the new format is set
     )
