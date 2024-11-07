@@ -5,7 +5,11 @@ from typing import List
 from infisical import InfisicalClient
 from loguru import logger
 
-from app.enums import SatelliteProductEnum, ImpaModelProductEnum, RionowcastModelProductEnum
+from app.enums import (
+    SatelliteProductEnum,
+    ImpaModelProductEnum,
+    RionowcastModelProductEnum,
+)
 
 
 def getenv_or_action(
