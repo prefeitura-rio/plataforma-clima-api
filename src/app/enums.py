@@ -11,3 +11,16 @@ class SatelliteProductEnum(str, Enum):
     RAIN_RATE = "rr"
     OCEAN_TEMPERATURE = "sst"
     TOTAL_PRECIPITABLE_WATER = "tpw"
+
+
+class ImpaModelProductEnum(str, Enum):
+    PYSTEPS = "pysteps"
+    UNET = "unet"
+    NOWCASTNET = "nowcastnet"
+    METNET3 = "metnet3"
+    MAMBA = "mamba"
+
+
+class RionowcastModelProductEnum(str, Enum):
+    V1 = "v1"
+    V2 = "v2"

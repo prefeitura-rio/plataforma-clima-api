@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from app.enums import SatelliteProductEnum
+from app.enums import SatelliteProductEnum, RionowcastModelProductEnum, ImpaModelProductEnum
 
 PRODUCTS_INFO = {
     SatelliteProductEnum.CAPE: {
@@ -262,27 +262,227 @@ PRODUCTS_INFO = {
             ],
         },
     },
-    SatelliteProductEnum.TOTAL_PRECIPITABLE_WATER: {
+    RionowcastModelProductEnum.V1: {
         "product": {
-            "name": "TPW (Total Precipitable Water)",
-            "description": "A Água Precipitada Total (TPW) é uma medida da quantidade total de vapor d'água presente na coluna de ar acima de um ponto específico.",
-            "unit": "mm",
-            "source": "Satélite GOES-16",
-            "frequency": "10 Min",
+            "name": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast (v1).",
+            "description": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast utilizando dados dos pluviômetros do Alertario e dos radares do Mendanha e Guaratiba.",
+            "unit": "mm/h",
+            "source": "Pluviômetros Alertario e radares do Mendanha e Guaratiba",
+            "frequency": "60 Min",
         },
-        "values_range": {"min": 0, "max": 60},
+        "values_range": {"min": 0, "max": 100},
+        "legend": {
+            "title": "Rionowcast (v1)",
+            "colors": [
+                {"value": 0, "color": "#8fdac7"},
+                {"value": 5, "color": "#35a98c"},
+                {"value": 25, "color": "#e9c46a"},
+                {"value": 50, "color": "#f4a261"},
+                {"value": 75, "color": "#e76f51"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
+    RionowcastModelProductEnum.V2: {
+        "product": {
+            "name": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast (v1).",
+            "description": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast utilizando dados do satélite GOES-16.",
+            "unit": "mm/h",
+            "source": "GOES-16",
+            "frequency": "60 Min",
+        },
+        "values_range": {"min": 0, "max": 100},
+        "legend": {
+            "title": "Rionowcast (v2)",
+            "colors": [
+                {"value": 0, "color": "#8fdac7"},
+                {"value": 5, "color": "#35a98c"},
+                {"value": 25, "color": "#e9c46a"},
+                {"value": 50, "color": "#f4a261"},
+                {"value": 75, "color": "#e76f51"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
+    ImpaModelProductEnum.NOWCASTNET: {
+        "product": {
+            "name": "Modelo de Previsão de Chuva NOWCASTNET (v1).",
+            "description": "Modelo de Previsão de Chuva usando a rede NOWCASTNET criado pelo grupo Centro Pi utilizando dados do satélite GOES-16.",
+            "unit": "mm/h",
+            "source": "Satélite GOES-16",
+            "frequency": "60 Min",
+        },
+        "values_range": {"min": 0, "max": 100},
         "legend": {
             "title": "Água Precipitada Total (TPW)",
             "colors": [
-                {"value": 0, "color": "#00008B"},
-                {"value": 5, "color": "#0000FF"},
-                {"value": 10, "color": "#00BFFF"},
-                {"value": 20, "color": "#87CEEB"},
-                {"value": 30, "color": "#00FF00"},
-                {"value": 40, "color": "#FFFF00"},
-                {"value": 50, "color": "#FFA500"},
-                {"value": 55, "color": "#FF4500"},
-                {"value": 60, "color": "#800000"},
+                {"value": 0, "color": "#8fdac7"},
+                {"value": 5, "color": "#35a98c"},
+                {"value": 25, "color": "#e9c46a"},
+                {"value": 50, "color": "#f4a261"},
+                {"value": 75, "color": "#e76f51"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
+    ImpaModelProductEnum.PYSTEPS: {
+        "product": {
+            "name": "Modelo de Previsão de Chuva PySteps (v1).",
+            "description": "Modelo de Previsão de Chuva usando Pysteps criado pelo grupo Centro Pi utilizando dados do satélite GOES-16.",
+            "unit": "mm/h",
+            "source": "Satélite GOES-16",
+            "frequency": "60 Min",
+        },
+        "values_range": {"min": 0, "max": 100},
+        "legend": {
+            "title": "Água Precipitada Total (TPW)",
+            "colors": [
+                {"value": 0, "color": "#8fdac7"},
+                {"value": 5, "color": "#35a98c"},
+                {"value": 25, "color": "#e9c46a"},
+                {"value": 50, "color": "#f4a261"},
+                {"value": 75, "color": "#e76f51"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
+    ImpaModelProductEnum.UNET: {
+        "product": {
+            "name": "Modelo de Previsão de Chuva UNET (v1).",
+            "description": "Modelo de Previsão de Chuva usando a rede UNET criado pelo grupo Centro Pi utilizando dados do satélite GOES-16.",
+            "unit": "mm/h",
+            "source": "Satélite GOES-16",
+            "frequency": "60 Min",
+        },
+        "values_range": {"min": 0, "max": 100},
+        "legend": {
+            "title": "Água Precipitada Total (TPW)",
+            "colors": [
+                {"value": 0, "color": "#8fdac7"},
+                {"value": 5, "color": "#35a98c"},
+                {"value": 25, "color": "#e9c46a"},
+                {"value": 50, "color": "#f4a261"},
+                {"value": 75, "color": "#e76f51"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
+    ImpaModelProductEnum.METNET3: {
+        "product": {
+            "name": "Modelo de Previsão de Chuva METNET3 (v1).",
+            "description": "Modelo de Previsão de Chuva usando a rede METNET3 criado pelo grupo Centro Pi utilizando dados do satélite GOES-16.",
+            "unit": "mm/h",
+            "source": "Satélite GOES-16",
+            "frequency": "60 Min",
+        },
+        "values_range": {"min": 0, "max": 100},
+        "legend": {
+            "title": "Água Precipitada Total (TPW)",
+            "colors": [
+                {"value": 0, "color": "#8fdac7"},
+                {"value": 5, "color": "#35a98c"},
+                {"value": 25, "color": "#e9c46a"},
+                {"value": 50, "color": "#f4a261"},
+                {"value": 75, "color": "#e76f51"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
+    ImpaModelProductEnum.MAMBA: {
+        "product": {
+            "name": "Modelo de Previsão de Chuva MAMBA (v1).",
+            "description": "Modelo de Previsão de Chuva usando a rede MAMBA criado pelo grupo Centro Pi utilizando dados do satélite GOES-16.",
+            "unit": "mm/h",
+            "source": "Satélite GOES-16",
+            "frequency": "60 Min",
+        },
+        "values_range": {"min": 0, "max": 100},
+        "legend": {
+            "title": "Água Precipitada Total (TPW)",
+            "colors": [
+                {"value": 0, "color": "#8fdac7"},
+                {"value": 5, "color": "#35a98c"},
+                {"value": 25, "color": "#e9c46a"},
+                {"value": 50, "color": "#f4a261"},
+                {"value": 75, "color": "#e76f51"},
             ],
             "opacity": 0.1,
         },
