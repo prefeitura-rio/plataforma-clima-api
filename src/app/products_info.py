@@ -262,6 +262,44 @@ PRODUCTS_INFO = {
             ],
         },
     },
+    SatelliteProductEnum.TOTAL_PRECIPITABLE_WATER: {
+        "product": {
+            "name": "TPW (Total Precipitable Water)",
+            "description": "A Água Precipitada Total (TPW) é uma medida da quantidade total de vapor d'água presente na coluna de ar acima de um ponto específico.",
+            "unit": "mm",
+            "source": "Satélite GOES-16",
+            "frequency": "10 Min",
+        },
+        "values_range": {"min": 0, "max": 60},
+        "legend": {
+            "title": "Água Precipitada Total (TPW)",
+            "colors": [
+                {"value": 0, "color": "#00008B"},
+                {"value": 5, "color": "#0000FF"},
+                {"value": 10, "color": "#00BFFF"},
+                {"value": 20, "color": "#87CEEB"},
+                {"value": 30, "color": "#00FF00"},
+                {"value": 40, "color": "#FFFF00"},
+                {"value": 50, "color": "#FFA500"},
+                {"value": 55, "color": "#FF4500"},
+                {"value": 60, "color": "#800000"},
+            ],
+            "opacity": 0.1,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "Hourly",
+            "spatial_resolution": "4 km x 4 km",
+            "interpolation_method": "None",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico",
+                }
+            ],
+        },
+    },
     RionowcastModelProductEnum.V1: {
         "product": {
             "name": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast (v1).",
