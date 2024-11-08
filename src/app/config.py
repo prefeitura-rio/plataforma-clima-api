@@ -5,7 +5,11 @@ from typing import List
 from infisical import InfisicalClient
 from loguru import logger
 
-from app.enums import SatelliteProductEnum
+from app.enums import (
+    SatelliteProductEnum,
+    ImpaModelProductEnum,
+    RionowcastModelProductEnum,
+)
 
 
 def getenv_or_action(
@@ -169,6 +173,38 @@ SATELLITE_PRODUCTS_MAPPING = {
     SatelliteProductEnum.OCEAN_TEMPERATURE: {
         "column": "sst",
         "gcs_prefix": "SST",
+    },
+}
+IMPA_PRODUCTS_MAPPING = {
+    ImpaModelProductEnum.MAMBA: {
+        "column": "mamba",
+        "gcs_prefix": "mamba",
+    },
+    ImpaModelProductEnum.METNET3: {
+        "column": "metnet3",
+        "gcs_prefix": "metnet3",
+    },
+    ImpaModelProductEnum.NOWCASTNET: {
+        "column": "nowcastnet",
+        "gcs_prefix": "nowcastnet",
+    },
+    ImpaModelProductEnum.PYSTEPS: {
+        "column": "pysteps",
+        "gcs_prefix": "pysteps",
+    },
+    ImpaModelProductEnum.UNET: {
+        "column": "unet",
+        "gcs_prefix": "unet",
+    },
+}
+RIONOWCAST_PRODUCTS_MAPPING = {
+    RionowcastModelProductEnum.V1: {
+        "column": "v1",
+        "gcs_prefix": "v1",
+    },
+    RionowcastModelProductEnum.V2: {
+        "column": "v2",
+        "gcs_prefix": "v2",
     },
 }
 SENTRY_ENABLE = getenv_or_action("SENTRY_ENABLE", default="false").lower() == "true"
