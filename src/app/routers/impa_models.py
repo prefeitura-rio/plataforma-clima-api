@@ -8,7 +8,7 @@ from fastapi import APIRouter, HTTPException
 
 # from google.cloud import bigquery
 # from loguru import logger
-from pendulum import DateTime, parse as pendulum_parse
+from pendulum import DateTime
 
 from app import config
 from app.enums import ImpaModelProductEnum
@@ -21,8 +21,8 @@ from app.utils import (
 )
 
 router = APIRouter(
-    prefix="/nowcasting_models",
-    tags=["Nowcasting models"],
+    prefix="/impa_models",
+    tags=["IMPA models"],
     responses={
         429: {"error": "Rate limit exceeded"},
     },
