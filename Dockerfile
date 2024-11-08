@@ -7,6 +7,12 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 ADD . /app
 WORKDIR /app
 
+# Install apt dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libexpat1 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install dependencies
 RUN uv sync
 
