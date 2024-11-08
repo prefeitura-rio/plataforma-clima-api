@@ -16,7 +16,7 @@ from starlette.responses import JSONResponse
 from app import config
 from app.pydantic_models import HealthCheck
 
-from app.routers import radar, satellite
+from app.routers import impa_models, radar, rionowcast_models, satellite
 
 logger.remove()
 logger.add(sys.stdout, level=config.LOG_LEVEL)
@@ -52,7 +52,9 @@ app.add_middleware(
     allow_credentials=config.ALLOW_CREDENTIALS,
 )
 
+app.include_router(impa_models.router)
 app.include_router(radar.router)
+app.include_router(rionowcast_models.router)
 app.include_router(satellite.router)
 
 add_pagination(app)
