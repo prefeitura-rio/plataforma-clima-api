@@ -5,6 +5,25 @@ from app.enums import (
     ImpaModelProductEnum,
 )
 
+alertario_precipitation_colors = [
+    {"value": 0, "color": "#8fdac7"},
+    {"value": 5, "color": "#35a98c"},
+    {"value": 10, "color": "#2e907d"},
+    {"value": 15, "color": "#28786f"},
+    {"value": 20, "color": "#7b9e58"},
+    {"value": 25, "color": "#e9c46a"},
+    {"value": 30, "color": "#dfb65d"},
+    {"value": 35, "color": "#d6a850"},
+    {"value": 40, "color": "#cc9b44"},
+    {"value": 45, "color": "#c28d37"},
+    {"value": 50, "color": "#f4a261"},
+    {"value": 55, "color": "#ef9664"},
+    {"value": 60, "color": "#ea8a67"},
+    {"value": 65, "color": "#e57e5a"},
+    {"value": 70, "color": "#e0715d"},
+    {"value": 75, "color": "#e76f51"},
+]
+
 PRODUCTS_INFO = {
     SatelliteProductEnum.CAPE: {
         "product": {
@@ -314,14 +333,8 @@ PRODUCTS_INFO = {
         },
         "values_range": {"min": 0, "max": 100},
         "legend": {
-            "title": "Rionowcast (v1)",
-            "colors": [
-                {"value": 0, "color": "#8fdac7"},
-                {"value": 5, "color": "#35a98c"},
-                {"value": 25, "color": "#e9c46a"},
-                {"value": 50, "color": "#f4a261"},
-                {"value": 75, "color": "#e76f51"},
-            ],
+            "title": "Modelo Rionowcast (v1)",
+            "colors": alertario_precipitation_colors,
             "opacity": 0.1,
         },
         "map": {
@@ -340,7 +353,7 @@ PRODUCTS_INFO = {
     },
     RionowcastModelProductEnum.V2: {
         "product": {
-            "name": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast (v1).",
+            "name": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast (v2).",
             "description": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast utilizando dados do satélite GOES-16.",
             "unit": "mm/h",
             "source": "GOES-16",
@@ -348,14 +361,8 @@ PRODUCTS_INFO = {
         },
         "values_range": {"min": 0, "max": 100},
         "legend": {
-            "title": "Rionowcast (v2)",
-            "colors": [
-                {"value": 0, "color": "#8fdac7"},
-                {"value": 5, "color": "#35a98c"},
-                {"value": 25, "color": "#e9c46a"},
-                {"value": 50, "color": "#f4a261"},
-                {"value": 75, "color": "#e76f51"},
-            ],
+            "title": "Modelo Rionowcast (v2)",
+            "colors": alertario_precipitation_colors,
             "opacity": 0.1,
         },
         "map": {
@@ -382,14 +389,8 @@ PRODUCTS_INFO = {
         },
         "values_range": {"min": 0, "max": 100},
         "legend": {
-            "title": "Água Precipitada Total (TPW)",
-            "colors": [
-                {"value": 0, "color": "#8fdac7"},
-                {"value": 5, "color": "#35a98c"},
-                {"value": 25, "color": "#e9c46a"},
-                {"value": 50, "color": "#f4a261"},
-                {"value": 75, "color": "#e76f51"},
-            ],
+            "title": "Modelo NowcastNet",
+            "colors": alertario_precipitation_colors,
             "opacity": 0.1,
         },
         "map": {
@@ -416,14 +417,8 @@ PRODUCTS_INFO = {
         },
         "values_range": {"min": 0, "max": 100},
         "legend": {
-            "title": "Água Precipitada Total (TPW)",
-            "colors": [
-                {"value": 0, "color": "#8fdac7"},
-                {"value": 5, "color": "#35a98c"},
-                {"value": 25, "color": "#e9c46a"},
-                {"value": 50, "color": "#f4a261"},
-                {"value": 75, "color": "#e76f51"},
-            ],
+            "title": "Modelo Pysteps",
+            "colors": alertario_precipitation_colors,
             "opacity": 0.1,
         },
         "map": {
@@ -450,14 +445,8 @@ PRODUCTS_INFO = {
         },
         "values_range": {"min": 0, "max": 100},
         "legend": {
-            "title": "Água Precipitada Total (TPW)",
-            "colors": [
-                {"value": 0, "color": "#8fdac7"},
-                {"value": 5, "color": "#35a98c"},
-                {"value": 25, "color": "#e9c46a"},
-                {"value": 50, "color": "#f4a261"},
-                {"value": 75, "color": "#e76f51"},
-            ],
+            "title": "Modelo Unet",
+            "colors": alertario_precipitation_colors,
             "opacity": 0.1,
         },
         "map": {
@@ -484,14 +473,8 @@ PRODUCTS_INFO = {
         },
         "values_range": {"min": 0, "max": 100},
         "legend": {
-            "title": "Água Precipitada Total (TPW)",
-            "colors": [
-                {"value": 0, "color": "#8fdac7"},
-                {"value": 5, "color": "#35a98c"},
-                {"value": 25, "color": "#e9c46a"},
-                {"value": 50, "color": "#f4a261"},
-                {"value": 75, "color": "#e76f51"},
-            ],
+            "title": "Modelo MetNet3",
+            "colors": alertario_precipitation_colors,
             "opacity": 0.1,
         },
         "map": {
@@ -518,14 +501,8 @@ PRODUCTS_INFO = {
         },
         "values_range": {"min": 0, "max": 100},
         "legend": {
-            "title": "Água Precipitada Total (TPW)",
-            "colors": [
-                {"value": 0, "color": "#8fdac7"},
-                {"value": 5, "color": "#35a98c"},
-                {"value": 25, "color": "#e9c46a"},
-                {"value": 50, "color": "#f4a261"},
-                {"value": 75, "color": "#e76f51"},
-            ],
+            "title": "Modelo Mamba",
+            "colors": alertario_precipitation_colors,
             "opacity": 0.1,
         },
         "map": {
