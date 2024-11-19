@@ -201,12 +201,12 @@ RIONOWCAST_PRODUCTS_MAPPING = {
     RionowcastModelProductEnum.V1: {
         "column": "v1",
         "gcs_prefix": "v1",
-        "time_horizon": ["1", "2", "3"],
+        "time_horizon": ["1h", "2h", "3h"],
     },
     RionowcastModelProductEnum.V2: {
         "column": "v2",
         "gcs_prefix": "v2",
-        "time_horizon": ["1", "2", "3"],
+        "time_horizon": ["1h", "2h", "3h"],
     },
 }
 SENTRY_ENABLE = getenv_or_action("SENTRY_ENABLE", default="false").lower() == "true"
