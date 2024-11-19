@@ -59,13 +59,13 @@ async def get_satellite_chart(
     end_time = end_time.in_tz(config.TIMEZONE)
 
     # If it's RR or SST, we still got no data
-    if product in [
-        SatelliteProductEnum.RAIN_RATE,
-        SatelliteProductEnum.OCEAN_TEMPERATURE,
-    ]:
-        raise HTTPException(
-            status_code=501, detail="This product is not implemented yet."
-        )
+    # if product in [
+    #     SatelliteProductEnum.RAIN_RATE,
+    #     SatelliteProductEnum.OCEAN_TEMPERATURE,
+    # ]:
+    #     raise HTTPException(
+    #         status_code=501, detail="This product is not implemented yet."
+    #     )
 
     table = config.BIGQUERY_TABLE_METRICAS_GEOESPACIAIS
     mapping = config.SATELLITE_PRODUCTS_MAPPING.get(product, None)

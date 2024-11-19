@@ -213,15 +213,15 @@ PRODUCTS_INFO = {
     },
     SatelliteProductEnum.RAIN_RATE: {
         "product": {
-            "name": "RR (Rain Rate)",
-            "description": "A taxa de chuva (Rain Rate - RR) é uma medida da intensidade da precipitação, expressa em milímetros por hora (mm/h). Ela indica a quantidade de chuva que cai em uma determinada área dentro de um período de tempo. Valores mais altos representam chuvas mais intensas, enquanto valores baixos indicam precipitação leve ou inexistente.",
+            "name": "RRQPE (Rainfall Rate Quantitative Precipitation Estimate)",
+            "description": "A taxa de chuva (Rainfall Rate Quantitative Precipitation Estimate - RRQPE) é uma medida da intensidade da precipitação, expressa em milímetros por hora (mm/h). Ela indica a quantidade de chuva que cai em uma determinada área dentro de um período de tempo. Valores mais altos representam chuvas mais intensas, enquanto valores baixos indicam precipitação leve ou inexistente.",
             "unit": "mm/h",
             "source": "Satélite GOES-16",
             "frequency": "10 Min",
         },
         "values_range": {"min": 0, "max": 50},
         "legend": {
-            "title": "Taxa de Chuva (RR)",
+            "title": "Taxa de Precipitação Estimada (RRQPE)",
             "colors": [
                 {"value": 0, "color": "#0000FF"},
                 {"value": 5, "color": "#00FFFF"},

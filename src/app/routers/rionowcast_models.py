@@ -30,12 +30,13 @@ router = APIRouter(
 
 
 @router.get(
-    "/rionowcast/gif/{product}",
+    "/rionowcast/gif/{product}/{time_horizon}",
     summary="Get GIF from Rionowcast models",
     response_model=List[ImageSliderOut],
 )
 async def get_rionowcast_models_gif(
     product: RionowcastModelProductEnum,
+    time_horizon: str,
     start_time: datetime,
     end_time: datetime,
 ):
@@ -61,8 +62,13 @@ async def get_rionowcast_models_gif(
         raise HTTPException(
             status_code=501, detail="This product is not implemented yet."
         )
+    # permited_time_horizon = mapping.get("time_horizon")
+    # if not permited_time_horizon:
+    #     raise HTTPException(
+    #         status_code=501, detail="This time horizon prediction is not implemented yet."
+    #     )
 
-    path_prefix = f"cor-clima-imagens/predicao_precipitacao/rionowcast/{gcs_product_prefix}/1h/without_background"
+    path_prefix = f"cor-clima-imagens/predicao_precipitacao/rionowcast/{gcs_product_prefix}/{time_horizon}/without_background"
     # TODO: modify to get other hours prediction
     return get_matching_blobs(
         start_time=start_time,

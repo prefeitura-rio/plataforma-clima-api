@@ -8,7 +8,7 @@ class SatelliteProductEnum(str, Enum):
     SHOWALTER_INDEX = "si"
     LIFTED_INDEX = "li"
     TOTALS_TOTALS_INDEX = "tt"
-    RAIN_RATE = "rr"
+    RAIN_RATE = "rrqpe"
     OCEAN_TEMPERATURE = "sst"
     TOTAL_PRECIPITABLE_WATER = "tpw"
 
