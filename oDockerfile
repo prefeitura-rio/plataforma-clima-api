@@ -1,0 +1,25 @@
+FROM python:3.10-slim
+
+# Instala dependências do sistema para o proj
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    clang \
+    proj-bin \
+    libproj-dev \
+    gdal-bin \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instala pyproj
+RUN pip install pyproj uvicorn uv
+
+# Diretório de trabalho
+WORKDIR /app
+
+# Copia seu código para dentro do container
+COPY . /app
+
+EXPOSE 8000
+EXPOSE 8080
+
+CMD ["uv", "run", "task", "serve"]
+
