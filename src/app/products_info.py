@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from app.enums import (
-    SatelliteProductEnum,
-    RionowcastModelProductEnum,
     ImpaModelProductEnum,
+    RadarProductEnum,
+    RionowcastModelProductEnum,
+    SatelliteProductEnum,
 )
 
 alertario_precipitation_colors = [
@@ -519,4 +520,40 @@ PRODUCTS_INFO = {
             ],
         },
     },
+    RadarProductEnum.REFLECTIVITY: {
+        "product": {
+            "name": "Refletividade de Radar",
+            "description": "Produto gerado pelo radar meteorológico para medir a intensidade da precipitação, representando a quantidade de energia refletida por partículas de água presentes na atmosfera.",
+            "unit": "dBZ",
+            "source": "Radar Meteorológico",
+            "frequency": "5 Min",
+        },
+        "values_range": {"min": 0, "max": 50},
+        "legend": {
+            "title": "Refletividade de Radar",
+            "colors": [
+                {"value": 20, "color": "#069008"},
+                {"value": 25, "color": "#0c6b11"},
+                {"value": 30, "color": "#004803"},
+                {"value": 35, "color": "#c3d500"},
+                {"value": 40, "color": "#ff7800"},
+                {"value": 45, "color": "#f61c00"},
+                {"value": 50, "color": "#d11fcc"}
+            ],
+            "opacity": 0.8,
+        },
+        "map": {
+            "type": "Heat map",
+            "projection": "Geographical",
+            "update_frequency": "5 Min",
+            "interpolation_method": "Linear",
+            "additional_layers": [
+                {
+                    "type": "Topography",
+                    "description": "Topografia adicionada para contexto geográfico.",
+                }
+            ],
+        },
+    },
+
 }
