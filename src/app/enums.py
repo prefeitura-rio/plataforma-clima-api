@@ -24,3 +24,7 @@ class ImpaModelProductEnum(str, Enum):
 class RionowcastModelProductEnum(str, Enum):
     V1 = "v1"
     V2 = "v2"
+
+
+class RadarProductEnum(str, Enum):
+    REFLECTIVITY = "reflectivity"
