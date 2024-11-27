@@ -162,6 +162,10 @@ SATELLITE_PRODUCTS_MAPPING = {
         "column": "li",
         "gcs_prefix": "LI",
     },
+    SatelliteProductEnum.TOTAL_PRECIPITABLE_WATER: {
+        "column": "tpw",
+        "gcs_prefix": "TPW",
+    },
     SatelliteProductEnum.TOTALS_TOTALS_INDEX: {
         "column": "tt",
         "gcs_prefix": "TT",
