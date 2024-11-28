@@ -8,6 +8,7 @@ from loguru import logger
 from app.enums import (
     SatelliteProductEnum,
     ImpaModelProductEnum,
+    RadarProductEnum,
     RionowcastModelProductEnum,
 )
 
@@ -211,6 +212,12 @@ RIONOWCAST_PRODUCTS_MAPPING = {
         "column": "v2",
         "gcs_prefix": "v2",
         "time_horizon": ["1h", "2h", "3h"],
+    },
+}
+RADAR_PRODUCTS_MAPPING = {
+    RadarProductEnum.REFLECTIVITY: {
+        "column": "reflectivity",
+        "gcs_prefix": "refletividade_horizontal",
     },
 }
 SENTRY_ENABLE = getenv_or_action("SENTRY_ENABLE", default="false").lower() == "true"
