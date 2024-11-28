@@ -217,7 +217,7 @@ RIONOWCAST_PRODUCTS_MAPPING = {
 RADAR_PRODUCTS_MAPPING = {
     RadarProductEnum.REFLECTIVITY: {
         "column": "reflectivity",
-        "gcs_prefix": "refletividade_horizontal"
+        "gcs_prefix": "refletividade_horizontal",
     },
 }
 SENTRY_ENABLE = getenv_or_action("SENTRY_ENABLE", default="false").lower() == "true"
