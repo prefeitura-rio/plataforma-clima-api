@@ -541,7 +541,7 @@ PRODUCTS_INFO = {
                 {"value": 35, "color": "#c3d500"},
                 {"value": 40, "color": "#ff7800"},
                 {"value": 45, "color": "#f61c00"},
-                {"value": 50, "color": "#d11fcc"}
+                {"value": 50, "color": "#d11fcc"},
             ],
             "opacity": 0.8,
         },
@@ -558,5 +558,4 @@ PRODUCTS_INFO = {
             ],
         },
     },
-
 }
