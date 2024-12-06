@@ -19,12 +19,12 @@ from app.enums import (
 #     {"value": 45, "color": "#ee2a00"},
 #     {"value": 50, "color": "#ED0000"},
 #     {"value": 55, "color": "#d40000"},
-    # {"value": 60, "color": "#bc0000"},
-    # {"value": 65, "color": "#a30000"},
-    # {"value": 70, "color": "#8A0000"},
-    # {"value": 75, "color": "#6e0000"},
-    # {"value": 80, "color": "#530000"},
-    # {"value": 85, "color": "#380000"},
+# {"value": 60, "color": "#bc0000"},
+# {"value": 65, "color": "#a30000"},
+# {"value": 70, "color": "#8A0000"},
+# {"value": 75, "color": "#6e0000"},
+# {"value": 80, "color": "#530000"},
+# {"value": 85, "color": "#380000"},
 #     {"value": 90, "color": "#1C0000"},
 # ]
 alertario_precipitation_colors = [
@@ -279,7 +279,7 @@ PRODUCTS_INFO = {
                 {"value": 20, "color": "#FFFF00"},
                 {"value": 25, "color": "#FFA500"},
                 {"value": 30, "color": "#FF4500"},
-                {"value": 35, "color": "#800000"}
+                {"value": 35, "color": "#800000"},
             ],
             "opacity": 0.1,
         },
