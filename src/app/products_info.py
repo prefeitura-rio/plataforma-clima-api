@@ -536,7 +536,7 @@ PRODUCTS_INFO = {
             "name": "Refletividade Horizontal - Radar do Mendanha",
             "description": "Produto gerado pelo radar meteorológico para medir a intensidade da precipitação, representando a quantidade de energia refletida por partículas de água presentes na atmosfera.",
             "unit": "dBZ",
-            "source": "Radar Mete15orológico",
+            "source": "Radar Meteorológico do Mendanha",
             "frequency": "5 Min",
         },
         "values_range": {"min": 15, "max": 50},
