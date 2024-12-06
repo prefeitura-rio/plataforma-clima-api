@@ -6,26 +6,34 @@ from app.enums import (
     SatelliteProductEnum,
 )
 
-alertario_precipitation_colors = [
-    {"value": 0, "color": "#63bbff"},
-    {"value": 5, "color": "#91ccab"},
-    {"value": 10, "color": "#bfdd56"},
-    {"value": 15, "color": "#eeee01"},
-    {"value": 20, "color": "#ffd163"},
-    {"value": 25, "color": "#ffb421"},
-    {"value": 30, "color": "#ff9700"},
-    {"value": 35, "color": "#f57000"},
-    {"value": 40, "color": "#ee5500"},
-    {"value": 45, "color": "#ee2a00"},
-    {"value": 50, "color": "#ED0000"},
-    # {"value": 55, "color": "#d40000"},
+# alertario_precipitation_colors = [
+#     {"value": 0, "color": "#63bbff"},
+#     {"value": 5, "color": "#91ccab"},
+#     {"value": 10, "color": "#bfdd56"},
+#     {"value": 15, "color": "#eeee01"},
+#     {"value": 20, "color": "#ffd163"},
+#     {"value": 25, "color": "#ffb421"},
+#     {"value": 30, "color": "#ff9700"},
+#     {"value": 35, "color": "#f57000"},
+#     {"value": 40, "color": "#ee5500"},
+#     {"value": 45, "color": "#ee2a00"},
+#     {"value": 50, "color": "#ED0000"},
+#     {"value": 55, "color": "#d40000"},
     # {"value": 60, "color": "#bc0000"},
     # {"value": 65, "color": "#a30000"},
-    {"value": 70, "color": "#8A0000"},
+    # {"value": 70, "color": "#8A0000"},
     # {"value": 75, "color": "#6e0000"},
     # {"value": 80, "color": "#530000"},
     # {"value": 85, "color": "#380000"},
-    {"value": 90, "color": "#1C0000"},
+#     {"value": 90, "color": "#1C0000"},
+# ]
+alertario_precipitation_colors = [
+    {"value": 0.01, "color": "#63bbff"},
+    {"value": 15.05, "color": "#eeee00"},
+    {"value": 27.55, "color": "#ffa500"},
+    {"value": 50, "color": "#ed0000"},
+    {"value": 70, "color": "#8a0000"},
+    {"value": 90, "color": "#1c0000"},
 ]
 
 PRODUCTS_INFO = {
@@ -259,7 +267,7 @@ PRODUCTS_INFO = {
             "source": "Satélite GOES-16",
             "frequency": "10 Min",
         },
-        "values_range": {"min": 268, "max": 308},
+        "values_range": {"min": -5, "max": 35},
         "legend": {
             "title": "Temperatura da Superfície do Mar (SST)",
             "colors": [
@@ -525,16 +533,17 @@ PRODUCTS_INFO = {
     },
     RadarProductEnum.REFLECTIVITY: {
         "product": {
-            "name": "Refletividade de Radar",
+            "name": "Refletividade Horizontal - Radar do Mendanha",
             "description": "Produto gerado pelo radar meteorológico para medir a intensidade da precipitação, representando a quantidade de energia refletida por partículas de água presentes na atmosfera.",
             "unit": "dBZ",
-            "source": "Radar Meteorológico",
+            "source": "Radar Mete15orológico",
             "frequency": "5 Min",
         },
-        "values_range": {"min": 0, "max": 50},
+        "values_range": {"min": 15, "max": 50},
         "legend": {
             "title": "Refletividade de Radar",
             "colors": [
+                {"value": 15, "color": "#5870f6"},
                 {"value": 20, "color": "#069008"},
                 {"value": 25, "color": "#0c6b11"},
                 {"value": 30, "color": "#004803"},
