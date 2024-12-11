@@ -263,7 +263,7 @@ PRODUCTS_INFO = {
         "product": {
             "name": "SST (Sea Surface Temperature)",
             "description": "A Temperatura da Superfície do Mar (SST) é uma medida da temperatura da água na superfície dos oceanos.",
-            "unit": "K",
+            "unit": "ºC",
             "source": "Satélite GOES-16",
             "frequency": "10 Min",
         },
