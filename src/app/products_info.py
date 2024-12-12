@@ -8,6 +8,7 @@ from app.enums import (
 
 # alertario_precipitation_colors = [
 #     {"value": 0, "color": "#63bbff"},
+#     {"value": 0.02, "color": "#63bbff"},
 #     {"value": 5, "color": "#91ccab"},
 #     {"value": 10, "color": "#bfdd56"},
 #     {"value": 15, "color": "#eeee01"},
@@ -19,16 +20,16 @@ from app.enums import (
 #     {"value": 45, "color": "#ee2a00"},
 #     {"value": 50, "color": "#ED0000"},
 #     {"value": 55, "color": "#d40000"},
-# {"value": 60, "color": "#bc0000"},
-# {"value": 65, "color": "#a30000"},
-# {"value": 70, "color": "#8A0000"},
-# {"value": 75, "color": "#6e0000"},
-# {"value": 80, "color": "#530000"},
-# {"value": 85, "color": "#380000"},
+#     {"value": 60, "color": "#bc0000"},
+#     {"value": 65, "color": "#a30000"},
+#     {"value": 70, "color": "#8A0000"},
+#     {"value": 75, "color": "#6e0000"},
+#     {"value": 80, "color": "#530000"},
+#     {"value": 85, "color": "#380000"},
 #     {"value": 90, "color": "#1C0000"},
 # ]
 alertario_precipitation_colors = [
-    {"value": 0.01, "color": "#63bbff"},
+    {"value": 0.02, "color": "#63bbff"},
     {"value": 15.05, "color": "#eeee00"},
     {"value": 27.55, "color": "#ffa500"},
     {"value": 50, "color": "#ed0000"},
@@ -337,15 +338,15 @@ PRODUCTS_INFO = {
     },
     RionowcastModelProductEnum.V1: {
         "product": {
-            "name": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast (v1).",
-            "description": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast utilizando dados dos pluviômetros do Alertario e dos radares do Mendanha e Guaratiba.",
+            "name": "Modelo ConvLSTM para Previsão de Chuva criado pelo grupo Rionowcast (v1).",
+            "description": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast utilizando dados dos pluviômetros do Alertario e dos radares do Mendanha e Guaratiba e ConvLSTM.",
             "unit": "mm/h",
             "source": "Pluviômetros Alertario e radares do Mendanha e Guaratiba",
             "frequency": "60 Min",
         },
         "values_range": {"min": 0, "max": 100},
         "legend": {
-            "title": "Modelo Rionowcast (v1)",
+            "title": "Modelo Rionowcast ConvLSTM (v1)",
             "colors": alertario_precipitation_colors,
             "opacity": 0.1,
         },
