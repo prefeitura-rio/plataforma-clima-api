@@ -342,7 +342,7 @@ PRODUCTS_INFO = {
     },
     RionowcastModelProductEnum.V1: {
         "product": {
-            "name": "Modelo ConvLSTM para Previsão de Chuva criado pelo grupo Rionowcast (v1).",
+            "name": "Modelo de Previsão de Chuva ConvLSTM (em teste).",
             "description": "Modelo de Previsão de Chuva criado pelo grupo Rionowcast utilizando dados dos pluviômetros do Alertario e dos radares do Mendanha e Guaratiba e ConvLSTM.",
             "unit": "mm/h",
             "source": "Pluviômetros Alertario e radares do Mendanha e Guaratiba",
