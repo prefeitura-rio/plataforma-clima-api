@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa: E501
 from datetime import datetime
 from math import isnan
 from typing import List
@@ -6,12 +7,14 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from google.cloud import bigquery
 from loguru import logger
+from numpy import isreal
 from pendulum import DateTime, parse as pendulum_parse
 
 from app import config
 from app.enums import SatelliteProductEnum
 from app.pydantic_models import ImageSliderOut, SatelliteChartDataOut
 from app.products_info import PRODUCTS_INFO
+from app.redis_cache import cache
 from app.utils import (
     get_data_from_bigquery,
     get_matching_blobs,
@@ -40,9 +43,11 @@ async def get_satellite_chart(
     def map_to_models(row):
         return SatelliteChartDataOut(
             timestamp=pendulum_parse(row["data_medicao"], tz="America/Sao_Paulo"),
-            value=row["valor"]
-            if row["valor"] and not isnan(float(row["valor"]))
-            else None,
+            value=(
+                row["valor"]
+                if row["valor"] and not isnan(float(row["valor"]))
+                else None
+            ),
         )
 
     # Sanity checks
@@ -102,6 +107,46 @@ async def get_satellite_chart(
     logger.debug(f"Data:\n{data}")
 
     return data.apply(map_to_models, axis=1).tolist()
+
+
+@router.get(
+    "/goes16/chart_last_hours/{product}",
+    summary="Get chart data from GOES16",
+    response_model=List[SatelliteChartDataOut],
+)
+async def get_satellite_chart_last_values(
+    product: SatelliteProductEnum,
+):
+    def map_to_models_last_values(item):
+        return SatelliteChartDataOut(
+            timestamp=pendulum_parse(item["timestamp"], tz="America/Sao_Paulo"),
+            value=(
+                item["valor"]
+                if isreal(item["valor"]) and not isnan(float(item["valor"]))
+                else None
+            ),
+        )
+
+    mapping = config.SATELLITE_PRODUCTS_MAPPING.get(product, None)
+    if not mapping:
+        raise HTTPException(status_code=400, detail="Invalid product")
+    column = mapping.get("column")
+    if not column:
+        raise HTTPException(
+            status_code=501, detail="This product is not implemented yet."
+        )
+
+    point_values = await cache.get_satellite_product_last_values(product)
+
+    logger.debug(f"\n\nSatellite product: {column}")
+    logger.debug(f"\n\nSatellite product point values: {point_values}")
+
+    if point_values is None:
+        raise HTTPException(
+            status_code=404, detail="No data found for the specified product"
+        )
+
+    return [map_to_models_last_values(item) for item in point_values]
 
 
 @router.get(
