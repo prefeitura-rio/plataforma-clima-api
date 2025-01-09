@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa: E501
 from datetime import datetime
+import json
 from math import isnan
+import sys
 from typing import List
 
 from fastapi import APIRouter, HTTPException
 from google.cloud import bigquery
 from loguru import logger
-from numpy import isreal
+from numpy import isreal, nan
 from pendulum import DateTime, parse as pendulum_parse
 
 from app import config
@@ -20,6 +22,7 @@ from app.utils import (
     get_matching_blobs,
     sanity_check_time_range,
 )
+
 
 router = APIRouter(
     prefix="/satellite",
@@ -139,6 +142,7 @@ async def get_satellite_chart_last_values(
     point_values = await cache.get_satellite_product_last_values(product)
 
     logger.debug(f"\n\nSatellite product: {column}")
+    logger.debug(f"\n\nSatellite product point values: {type(point_values)}")
     logger.debug(f"\n\nSatellite product point values: {point_values}")
 
     if point_values is None:
@@ -146,7 +150,17 @@ async def get_satellite_chart_last_values(
             status_code=404, detail="No data found for the specified product"
         )
 
-    return [map_to_models_last_values(item) for item in point_values]
+    if isinstance(point_values, bytes):
+        point_values = point_values.decode('utf-8')
+        point_values = point_values.replace("NaN", "null")
+        point_values = json.loads(point_values)
+        for item in point_values[0]:
+            if item['valor'] is None:
+                item['valor'] = nan
+        logger.debug(f"\n\nSatellite product point values: {type(point_values[0])}")
+        logger.debug(f"\n\nSatellite product point values: {point_values[0]}")
+
+    return [map_to_models_last_values(item) for item in point_values[0]]
 
 
 @router.get(
