@@ -151,12 +151,12 @@ async def get_satellite_chart_last_values(
         )
 
     if isinstance(point_values, bytes):
-        point_values = point_values.decode('utf-8')
+        point_values = point_values.decode("utf-8")
         point_values = point_values.replace("NaN", "null")
         point_values = json.loads(point_values)
         for item in point_values[0]:
-            if item['valor'] is None:
-                item['valor'] = nan
+            if item["valor"] is None:
+                item["valor"] = nan
         logger.debug(f"\n\nSatellite product point values: {type(point_values[0])}")
         logger.debug(f"\n\nSatellite product point values: {point_values[0]}")
 
