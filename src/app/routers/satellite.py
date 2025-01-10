@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa: E501
 from datetime import datetime
-import json
 from math import isnan
-import sys
 from typing import List
 
 from fastapi import APIRouter, HTTPException
@@ -138,32 +136,20 @@ async def get_satellite_chart_last_values(
         raise HTTPException(
             status_code=501, detail="This product is not implemented yet."
         )
-
-    point_values = await cache.get_satellite_product_last_values(product)
+    product = product.lower()
+    product = "cape" if product == "cp" else product
+    logger.info("Start getting data from redis and processing it")
+    point_values = await cache.process_redis_data(product)
 
     logger.info(f"\n\nSatellite product: {column}")
-    logger.warning(f"\n\nSatellite product: {column}")
-    logger.warning(f"\n\nSatellite product point values: {type(point_values)}")
-    logger.warning(f"\n\nSatellite product point values: {point_values}")
-    logger.trace(f"\n\nSatellite product point values: {point_values}")
+    logger.info(f"\n\nSatellite product type of point values: {type(point_values)}")
+    logger.info(f"\n\nSatellite product point values: {point_values}")
 
-    if point_values is None:
-        raise HTTPException(
-            status_code=404, detail="No data found for the specified product"
-        )
-
-    if isinstance(point_values, bytes):
-        try:
-            point_values = point_values.decode("utf-8")
-        except UnicodeDecodeError:
-            point_values = point_values.decode("latin-1")
-        point_values = point_values.replace("NaN", "null")
-        point_values = json.loads(point_values)
-        for item in point_values[0]:
-            if item["valor"] is None:
-                item["valor"] = nan
-        logger.info(f"\n\nSatellite product point values: {type(point_values[0])}")
-        logger.info(f"\n\nSatellite product point values: {point_values[0]}")
+    for item in point_values[0]:
+        if item["valor"] is None:
+            item["valor"] = nan
+    logger.info(f"\n\nSatellite product point values: {type(point_values[0])}")
+    logger.info(f"\n\nSatellite product point values: {point_values[0]}")
 
     return [map_to_models_last_values(item) for item in point_values[0]]
 
