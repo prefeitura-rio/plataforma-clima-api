@@ -6,7 +6,6 @@ Este documento fornece instruções sobre como usar o Docker Compose e interagir
 REDIS_HOST = "redis" # tem que ter o nome do nosso container que no caso é esse mesmo
 REDIS_PORT = int("6379")
 REDIS_DB = int("0")
-REDIS_PASSWORD = "ignore"
 
 ## Alterar arquivo main.py
 Comentar a linha que contem o password do redis
@@ -30,15 +29,22 @@ Para ver logs de nível DEBUG
 
 Para construir a imagem do Docker, você pode usar um dos seguintes comandos:
 
-- Se estiver na mesma pasta que o `docker-compose.yml`:
+- Se estiver na mesma pasta que o `docker-compose.yml` :
   ```bash
-  sudo docker-compose build
+  sudo docker-compose up --build
   ```
 
 - Se o arquivo `docker-compose.yml` estiver localizado em `local_test`:
   ```bash
   sudo docker-compose -f local_test/docker-compose.yml build
   ```
+
+- Se der algum problema entre subir uma imagem e outra pode ser devido à imagens ou contêineres corrompidos já existentes. Você pode remover todos os contêineres e imagens não utilizados com os seguintes comandos:
+
+```bash
+   docker-compose down --rmi all
+   docker system prune -a
+```
 
 ## Listar Imagens
 
