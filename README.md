@@ -32,7 +32,7 @@ Este projeto é uma API que pode ser executada em um contêiner Docker ou localm
     docker run -it --rm -p 8080:80 --env-file .env test
     ```
 
-3. Acesse a documentação da API em seu navegador:
+3. **Acesse a documentação da API em seu navegador:**
 
     ```
     http://localhost:8080/docs
