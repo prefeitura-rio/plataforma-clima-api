@@ -42,10 +42,7 @@ class Cache:
         """
         redis_data = await self._cache.get(key)
         if redis_data is None:
-            raise HTTPException(
-                status_code=404,
-                detail=f"No data found for key {key}"
-            )
+            raise HTTPException(status_code=404, detail=f"No data found for key {key}")
         return redis_data
 
     async def process_redis_data(self, key: str) -> List:
