@@ -84,7 +84,7 @@ PRODUCTS_INFO = {
         "product": {
             "name": "KI (K-Index)",
             "description": "O KI (K-Index) é um índice utilizado para avaliar o potencial de tempestades e a instabilidade atmosférica. Ele é derivado de medições de temperatura e umidade em diferentes níveis da atmosfera e ajuda a identificar áreas propensas à formação de tempestades.",
-            "unit": "Unidade",
+            "unit": "°C",
             "source": "Satélite GOES-16",
             "frequency": "10 Min",
         },
@@ -196,7 +196,7 @@ PRODUCTS_INFO = {
         "product": {
             "name": "TT (Total Totals Index)",
             "description": "O TT (Total Totals Index) é um índice de instabilidade atmosférica usado para prever a ocorrência de tempestades convectivas severas. Ele combina a temperatura no nível de 850 hPa com a diferença entre a temperatura e o ponto de orvalho no nível de 850 hPa, e a temperatura no nível de 500 hPa.",
-            "unit": "Índice",
+            "unit": "ºC",
             "source": "Satélite GOES-16",
             "frequency": "10 Min",
         },
