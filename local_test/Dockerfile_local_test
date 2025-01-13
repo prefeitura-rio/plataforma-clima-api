@@ -13,7 +13,11 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
+    # RUN apt-get update -qq || { echo "apt-get update failed"; exit 1; }
+    # RUN apt-get install -y --no-install-recommends curl libexpat1 || { echo "apt-get install failed"; exit 1; }
+    # RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+    # Install dependencies
 RUN uv sync
 
 # Run the app

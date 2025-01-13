@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+
+# from math import isnan
 from typing import List
 
 from fastapi import APIRouter, HTTPException
-from pendulum import DateTime
+
+# from google.cloud import bigquery
+# from loguru import logger
+from pendulum import DateTime, parse as pendulum_parse
 
 from app import config
-from app.enums import RadarProductEnum
-from app.pydantic_models import ImageSliderOut
+from app.enums import RionowcastModelProductEnum
+from app.pydantic_models import ImageSliderOut  # , SatelliteChartDataOut
 from app.products_info import PRODUCTS_INFO
-from app.utils import get_matching_blobs, sanity_check_time_range
+from app.utils import (
+    # get_data_from_bigquery,
+    get_matching_blobs,
+    sanity_check_time_range,
+)
 
 router = APIRouter(
-    prefix="/radar",
-    tags=["Radar data"],
+    prefix="/nowcasting_models",
+    tags=["Nowcasting models"],
     responses={
         429: {"error": "Rate limit exceeded"},
     },
@@ -21,12 +30,13 @@ router = APIRouter(
 
 
 @router.get(
-    "/mendanha/{product}",
-    summary="Get GIF from Mendanha Radar",
+    "/rionowcast/gif/{product}/{time_horizon}",
+    summary="Get GIF from Rionowcast models",
     response_model=List[ImageSliderOut],
 )
-async def get_mendanha_radar_data(
-    product: RadarProductEnum,
+async def get_rionowcast_models_gif(
+    product: RionowcastModelProductEnum,
+    time_horizon: str,
     start_time: datetime,
     end_time: datetime,
 ):
@@ -44,7 +54,7 @@ async def get_mendanha_radar_data(
     end_time = end_time.in_tz(config.TIMEZONE)
 
     # Get blob URLs list
-    mapping = config.RADAR_PRODUCTS_MAPPING.get(product, None)
+    mapping = config.RIONOWCAST_PRODUCTS_MAPPING.get(product, None)
     if not mapping:
         raise HTTPException(status_code=400, detail="Invalid product")
     gcs_product_prefix = mapping.get("gcs_prefix")
@@ -52,9 +62,14 @@ async def get_mendanha_radar_data(
         raise HTTPException(
             status_code=501, detail="This product is not implemented yet."
         )
+    # permited_time_horizon = mapping.get("time_horizon")
+    # if not permited_time_horizon:
+    #     raise HTTPException(
+    #         status_code=501, detail="This time horizon prediction is not implemented yet."
+    #     )
 
-    # Get blob URLs list
-    path_prefix = f"cor-clima-imagens/radar/mendanha/{gcs_product_prefix}/without_background/without_colorbar/"
+    path_prefix = f"cor-clima-imagens/predicao_precipitacao/rionowcast/{gcs_product_prefix}/{time_horizon}/without_background"
+    # TODO: modify to get other hours prediction
     return get_matching_blobs(
         start_time=start_time,
         end_time=end_time,
@@ -64,11 +79,11 @@ async def get_mendanha_radar_data(
 
 @router.get(
     "/info/{product}",
-    summary="Get information about a radar product",
+    summary="Get information about a product",
     response_model=dict,
 )
-async def get_radar_info(product: RadarProductEnum):
-    mapping = config.RADAR_PRODUCTS_MAPPING.get(product, None)
+async def get_model_info(product: RionowcastModelProductEnum):
+    mapping = config.RIONOWCAST_PRODUCTS_MAPPING.get(product, None)
     if not mapping:
         raise HTTPException(status_code=400, detail="Invalid product")
     product_info = PRODUCTS_INFO.get(product, None)

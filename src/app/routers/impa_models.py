@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+
+# from math import isnan
 from typing import List
 
 from fastapi import APIRouter, HTTPException
+
+# from google.cloud import bigquery
+# from loguru import logger
 from pendulum import DateTime
 
 from app import config
-from app.enums import RadarProductEnum
-from app.pydantic_models import ImageSliderOut
+from app.enums import ImpaModelProductEnum
+from app.pydantic_models import ImageSliderOut  # , SatelliteChartDataOut
 from app.products_info import PRODUCTS_INFO
-from app.utils import get_matching_blobs, sanity_check_time_range
+from app.utils import (
+    # get_data_from_bigquery,
+    get_matching_blobs,
+    sanity_check_time_range,
+)
 
 router = APIRouter(
-    prefix="/radar",
-    tags=["Radar data"],
+    prefix="/impa_models",
+    tags=["IMPA models"],
     responses={
         429: {"error": "Rate limit exceeded"},
     },
@@ -21,12 +30,12 @@ router = APIRouter(
 
 
 @router.get(
-    "/mendanha/{product}",
-    summary="Get GIF from Mendanha Radar",
+    "/impa/gif/{product}",
+    summary="Get GIF from IMPA models",
     response_model=List[ImageSliderOut],
 )
-async def get_mendanha_radar_data(
-    product: RadarProductEnum,
+async def get_impa_models_gif(
+    product: ImpaModelProductEnum,
     start_time: datetime,
     end_time: datetime,
 ):
@@ -44,7 +53,7 @@ async def get_mendanha_radar_data(
     end_time = end_time.in_tz(config.TIMEZONE)
 
     # Get blob URLs list
-    mapping = config.RADAR_PRODUCTS_MAPPING.get(product, None)
+    mapping = config.IMPA_PRODUCTS_MAPPING.get(product, None)
     if not mapping:
         raise HTTPException(status_code=400, detail="Invalid product")
     gcs_product_prefix = mapping.get("gcs_prefix")
@@ -53,8 +62,8 @@ async def get_mendanha_radar_data(
             status_code=501, detail="This product is not implemented yet."
         )
 
-    # Get blob URLs list
-    path_prefix = f"cor-clima-imagens/radar/mendanha/{gcs_product_prefix}/without_background/without_colorbar/"
+    path_prefix = f"cor-clima-imagens/predicao_precipitacao/impa/{gcs_product_prefix}/v1/3h/without_background"
+
     return get_matching_blobs(
         start_time=start_time,
         end_time=end_time,
@@ -64,11 +73,11 @@ async def get_mendanha_radar_data(
 
 @router.get(
     "/info/{product}",
-    summary="Get information about a radar product",
+    summary="Get information about a product",
     response_model=dict,
 )
-async def get_radar_info(product: RadarProductEnum):
-    mapping = config.RADAR_PRODUCTS_MAPPING.get(product, None)
+async def get_model_info(product: ImpaModelProductEnum):
+    mapping = config.IMPA_PRODUCTS_MAPPING.get(product, None)
     if not mapping:
         raise HTTPException(status_code=400, detail="Invalid product")
     product_info = PRODUCTS_INFO.get(product, None)
