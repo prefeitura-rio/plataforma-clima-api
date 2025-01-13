@@ -7,7 +7,7 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from google.cloud import bigquery
 from loguru import logger
-from numpy import isreal, nan
+from numpy import isreal
 from pendulum import DateTime, parse as pendulum_parse
 
 from app import config
@@ -143,15 +143,12 @@ async def get_satellite_chart_last_values(
 
     logger.info(f"\n\nSatellite product: {column}")
     logger.info(f"\n\nSatellite product type of point values: {type(point_values)}")
+    logger.info(
+        f"\n\nSatellite product type inside point values: {type(point_values[0])}"
+    )
     logger.info(f"\n\nSatellite product point values: {point_values}")
 
-    for item in point_values[0]:
-        if item["valor"] is None:
-            item["valor"] = nan
-    logger.info(f"\n\nSatellite product point values: {type(point_values[0])}")
-    logger.info(f"\n\nSatellite product point values: {point_values[0]}")
-
-    return [map_to_models_last_values(item) for item in point_values[0]]
+    return [map_to_models_last_values(item) for item in point_values]
 
 
 @router.get(
