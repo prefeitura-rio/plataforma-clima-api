@@ -6,6 +6,8 @@ on:
     branches:
       - main
       - staging
+    paths-ignore:
+      - k8s/**
 
 permissions:
   contents: read
@@ -13,7 +15,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: iplanrio-runners
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -34,9 +36,9 @@ jobs:
           IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
           TAGS="$IMAGE:$GITHUB_SHA"
           if [ "$GITHUB_REF_NAME" = "main" ]; then
-            TAGS="$TAGS,$IMAGE:stable"
+            TAGS="$TAGS,$IMAGE:stable,$IMAGE:prod-$GITHUB_RUN_NUMBER"
           elif [ "$GITHUB_REF_NAME" = "staging" ]; then
-            TAGS="$TAGS,$IMAGE:latest"
+            TAGS="$TAGS,$IMAGE:latest,$IMAGE:staging-$GITHUB_RUN_NUMBER"
           fi
           echo "tags=$TAGS" >> "$GITHUB_OUTPUT"
 
