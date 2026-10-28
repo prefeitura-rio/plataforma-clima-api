@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa: E501
 
-from os import getenv
+from os import environ, getenv
 from typing import List
 
-from infisical import InfisicalClient
+from infisical_sdk import InfisicalSDKClient
 from loguru import logger
 
 from app.enums import (
@@ -78,18 +78,27 @@ def getenv_list_or_action(
 
 def inject_environment_variables(environment: str):
     """Inject environment variables from Infisical."""
-    site_url = getenv_or_action("INFISICAL_ADDRESS", action="raise")
-    token = getenv_or_action("INFISICAL_TOKEN", action="raise")
-    infisical_client = InfisicalClient(
-        token=token,
-        site_url=site_url,
+    infisical_client = InfisicalSDKClient(
+        host=getenv_or_action("INFISICAL_ADDRESS", action="raise"),
     )
-    secrets = infisical_client.get_all_secrets(
-        environment=environment, attach_to_os_environ=True
+    infisical_client.auth.universal_auth.login(
+        client_id=getenv_or_action("INFISICAL_CLIENT_ID", action="raise"),
+        client_secret=getenv_or_action("INFISICAL_CLIENT_SECRET", action="raise"),
     )
-    logger.info(f"Injecting {len(secrets)} environment variables from Infisical:")
-    for secret in secrets:
-        logger.info(f" - {secret.secret_name}: {mask_string(secret.secret_value)}")
+    response = infisical_client.secrets.list_secrets(
+        project_slug=getenv_or_action("INFISICAL_PROJECT_SLUG", action="raise"),
+        environment_slug=getenv_or_action(
+            "INFISICAL_ENVIRONMENT", action="ignore", default=environment
+        ),
+        secret_path="/",
+        include_imports=False,
+    )
+    logger.info(
+        f"Injecting {len(response.secrets)} environment variables from Infisical:"
+    )
+    for secret in response.secrets:
+        environ[secret.secretKey] = secret.secretValue
+        logger.info(f" - {secret.secretKey}: {mask_string(secret.secretValue)}")
 
 
 def mask_string(string: str, *, mask: str = "*") -> str:
