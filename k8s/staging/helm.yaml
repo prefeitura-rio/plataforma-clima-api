@@ -1,0 +1,80 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: prefeitura-rio-api-staging
+spec:
+  type: oci
+  interval: 10m
+  url: oci://ghcr.io/prefeitura-rio/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: plataforma-clima-api-staging
+spec:
+  interval: 10m
+  releaseName: plataforma-clima-api-staging
+  chart:
+    spec:
+      chart: base-chart
+      version: 2.4.20
+      sourceRef:
+        kind: HelmRepository
+        name: prefeitura-rio-api-staging
+  values:
+    fullnameOverride: plataforma-clima-api-staging
+    image:
+      repository: ghcr.io/prefeitura-rio/plataforma-clima-api
+      tag: staging-1 # {"$imagepolicy": "plataforma-clima:plataforma-clima-api-staging:tag"}
+      pullPolicy: IfNotPresent
+    service:
+      port: 80
+      containerPort: 80
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 60
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 60
+      timeoutSeconds: 5
+      failureThreshold: 3
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: 500m
+        memory: 2Gi
+    podSecurityContext:
+      runAsNonRoot: false
+    envFrom:
+      - secretRef:
+          name: plataforma-clima-api-staging-infisical
+    replicaCount: 1
+    autoscaling:
+      enabled: false
+    istio:
+      enabled: false
+    ingress:
+      enabled: false
+    podDisruptionBudget:
+      enabled: false
+    flux:
+      policy:
+        semver: null
+        numerical:
+          order: asc
+      filterTags:
+        pattern: ^staging-(?P<n>[0-9]+)$
+        extract: $n
+      imageUpdateOverwrite:
+        git:
+          branch: staging
